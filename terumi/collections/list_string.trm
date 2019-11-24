@@ -1,0 +1,157 @@
+use terumi.casting
+
+class ListString
+{
+	number _length
+	ListStringItem _first
+	ListStringItem _top
+
+	ctor() {
+		_length = 0
+	}
+	
+	number length() {
+		return _length
+	}
+	
+	add(string value) {
+		_add(value)
+	}
+	
+	remove(number index) {
+		if (_check_index(index, "terumi.collections.ListString.remove(number)")) {
+			_remove(index)
+		}
+	}
+	
+	string get(number index) {
+		if (_check_index(index, "terumi.collections.ListString.get(number)")) {
+			return _get(index)
+		}
+		
+		return ""
+	}
+	
+	ListStringIterator iterate() {
+		return new ListStringIterator(_first, _length)
+	}
+	
+	bool _check_index(number index, string where) {
+		if (index < 0) {
+			@println("ERROR: in {where}: index ({to_string(index)}) less than 0")
+			return false
+		}
+		
+		if (index >= _length) {
+			@println("ERROR: in {where}: index ({to_string(index)}) greater than length of this ListString ({to_string(_length)})")
+			return false
+		}
+		
+		return true
+	}
+	
+	_add(string value) {
+		ListStringItem new_top = new ListStringItem(value)
+		
+		if (_length == 0) {
+			_first = new_top
+			_top = new_top
+		} else {
+			new_top.prev(_top)
+		
+			_top.next(new_top)
+			_top = new_top
+		}
+		
+		_length = _length + 1
+	}
+	
+	_remove(number index) {
+		if (index == 0) {
+			_first = _first.next()
+		} else if (index == _length - 1) {
+			_top = _top.prev()
+		} else {
+			ListStringItem current = _first
+		
+			for(number i = 0; i < index; i++) {
+				current = current.next()
+			}
+			
+			current.prev().next(current.next())
+		}
+	}
+	
+	_get(number index) {
+		ListStringItem current = _first
+		
+		for(number i = 0; i < index; i++) {
+			current = current.next()
+		}
+		
+		return current.value()
+	}
+}
+
+class ListStringItem
+{
+	ListStringItem _next
+	ListStringItem _prev
+	string _value
+
+	ctor(string value) {
+		_value = value
+	}
+	
+	string value() {
+		return _value
+	}
+	
+	ListStringItem next() {
+		return _next
+	}
+	
+	next(ListStringItem next) {
+		_next = next
+	}
+	
+	ListStringItem prev() {
+		return _prev
+	}
+	
+	prev(ListStringItem prev) {
+		_prev = prev
+	}
+}
+
+class ListStringIterator
+{
+	number _index
+	number _length
+	ListStringItem _current
+
+	ctor(ListStringItem item, number length) {
+		_current = item
+		_index = 0
+		_length = length
+	}
+	
+	number index() {
+		return _index
+	}
+	
+	bool has_next() {
+		return _index < _length
+	}
+	
+	string next() {
+		string result = _current.value()
+		_index = _index + 1
+		
+		if (has_next()) {
+			_current = _current.next()
+		}
+		
+		return result
+	}
+}

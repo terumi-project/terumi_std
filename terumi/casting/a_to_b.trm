@@ -1,0 +1,43 @@
+string to_string(number value) {
+	string tmp = ""
+	tmp = value
+	return tmp
+}
+
+string to_string(bool value) {
+	if (value) {
+		return "true"
+	} else {
+		return "false"
+	}
+}
+
+number to_number(string value) {
+	number tmp = 0
+	tmp = value
+	return tmp
+}
+
+number to_number(bool value) {
+	if (value) {
+		return 1
+	}
+	
+	return 0
+}
+
+bool to_bool(string value) {
+	if (value == "true") {
+		return true
+	}
+	
+	return false
+}
+
+bool to_bool(number value) {
+	if (value == 1) {
+		return true
+	}
+	
+	return false
+}
