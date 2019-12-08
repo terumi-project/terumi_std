@@ -82,7 +82,7 @@ class ListString
 		}
 	}
 	
-	_get(number index) {
+	string _get(number index) {
 		ListStringItem current = _first
 		
 		for(number i = 0; i < index; i++) {
